@@ -1,4 +1,5 @@
 import tkinter as tk
+from app.enroll import main as start_enrollment
 
 from app.recognize import main as start_recognition
 from app.attendance.history import get_attendance
@@ -52,6 +53,7 @@ def run():
         root,
         text="Enroll Participant",
         width=25,
+        command=start_enrollment,
     ).pack(pady=8)
 
     tk.Button(
