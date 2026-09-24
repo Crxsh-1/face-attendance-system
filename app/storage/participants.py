@@ -52,3 +52,27 @@ def get_participant_name(participant_id: int):
         ).fetchone()
 
     return row[0] if row else None
+
+def delete_participant(participant_id: int) -> bool:
+    with get_connection() as conn:
+        conn.execute(
+            "DELETE FROM attendance WHERE participant_id = ?",
+            (participant_id,),
+        )
+        conn.execute(
+            "DELETE FROM embeddings WHERE participant_id = ?",
+            (participant_id,),
+        )
+        cursor = conn.execute(
+            "DELETE FROM participants WHERE id = ?",
+            (participant_id,),
+        )
+
+    return cursor.rowcount > 0
+
+def get_participants():
+    with get_connection() as conn:
+        return conn.execute(
+            "SELECT id, name FROM participants ORDER BY name"
+        ).fetchall()
+
