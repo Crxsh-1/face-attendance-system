@@ -1,4 +1,4 @@
-import sqlite3
+import numpy as np
 from datetime import datetime, timezone
 
 from app.storage.database import get_connection
@@ -31,3 +31,24 @@ def add_participant(name: str, embedding) -> int:
         )
 
         return participant_id
+
+
+def get_embeddings():
+    with get_connection() as conn:
+        rows = conn.execute(
+            "SELECT participant_id, embedding FROM embeddings"
+        ).fetchall()
+
+    return [
+        (participant_id, np.frombuffer(data, dtype=np.float32))
+        for participant_id, data in rows
+    ]
+
+def get_participant_name(participant_id: int):
+    with get_connection() as conn:
+        row = conn.execute(
+            "SELECT name FROM participants WHERE id = ?",
+            (participant_id,),
+        ).fetchone()
+
+    return row[0] if row else None
