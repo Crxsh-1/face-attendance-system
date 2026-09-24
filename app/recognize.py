@@ -3,6 +3,7 @@ import cv2
 from app.vision.face_engine import FaceEngine
 from app.vision.matcher import find_best_match
 from app.storage.participants import get_embeddings, get_participant_name
+from app.attendance.service import record_attendance
 
 
 def main():
@@ -46,6 +47,10 @@ def main():
                     if participant_id is not None
                     else None
                 )
+
+                if participant_id is not None:
+                    if record_attendance(participant_id):
+                        print(f"Attendance recorded: {name}")
 
                 label = (
                     f"{name} ({distance:.2f})"
