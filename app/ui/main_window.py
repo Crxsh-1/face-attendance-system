@@ -104,13 +104,13 @@ def manage_participants(parent):
             ).pack(pady=20)
             return
 
-        for participant_id, name in records:
+        for serial_number, (participant_id, name) in enumerate(records, start=1):
             row = ttk.Frame(list_frame)
             row.pack(fill="x", pady=5)
 
             ttk.Label(
                 row,
-                text=f"{participant_id}: {name}",
+                text=f"{serial_number}: {name}",
             ).pack(side="left")
 
             ttk.Button(
@@ -118,6 +118,7 @@ def manage_participants(parent):
                 text="Delete",
                 command=lambda pid=participant_id: delete_selected(pid),
             ).pack(side="right")
+
 
     def delete_selected(participant_id):
         confirmed = messagebox.askyesno(
